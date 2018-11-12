@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}List{% endblock %}
+
+{% block nav %}
+    {% if user.is_authenticated %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'logout' %}"> Logout </a>
+        </li>
+    {% else %}
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'login' %}"> Sing In </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="{% url 'signup' %}"> Sing Up </a>
+        </li>
+    {% endif %}
+{% endblock %}
+
+{% block content %}
+{% if user.is_authenticated %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Home</li>
+            </ol>
+        </nav>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <td>Usuario</td>
+                    <td>Nombre</td>
+                    <td>Correo</td>
+                    <td>Direccion</td>
+                    <td>Telefono</td>
+                    <td>Role</td>
+                    <td>Acciones</td>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in object_list %}
+                {% if user.is_superuser %}
+
+                {% else %}
+                <tr>
+                    <td>{{ user.username }}</td>
+                    <td>{{ user.first_name }} {{ user.last_name }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.address }}</td>
+                    <td>{{ user.telephone }}</td>
+                    <td>
+                        {% load permission_tags %}
+                        {% if user|has_role:'student' %}
+                        Student
+                        {% endif %}
+                        {% if user|has_role:'teacher' %}
+                        Teacher
+                        {% endif %}
+                        {% if user|has_role:'supervisor' %}
+                        Supervisor
+                        {% endif %}
+                    </td>
+                    <td><a class="btn btn-primary" href="{% url 'userupdate' user.id %}">Editar</a> <a class="btn btn-danger" href="{% url 'userdelete' user.id %}">Eliminar</a></td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+    
+{% endif %}
+{% endblock %}

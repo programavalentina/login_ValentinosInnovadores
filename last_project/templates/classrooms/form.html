@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block title %}Create{% endblock %}
+
+{% block content %}
+<div class="container">
+
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.errors }}
+                    {{ field.label_tag }}
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <div class="text-center">
+                <a class="btn btn-secondary" href="{% url 'classrooms' %}">Cancel</a>
+                <button type="submit" class="btn btn-primary">
+                    Register
+                </button>
+            </div>
+        </form>
+</div>
+{% endblock %}
